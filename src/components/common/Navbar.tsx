@@ -55,47 +55,23 @@ export const Navbar: React.FC = () => {
           </div>
         </Link>
 
-        {/* Portal Switching Links (Desktop & Mobile Pills) */}
-        {role === 'driver' ? (
-          <nav className="hidden md:flex items-center gap-1.5 bg-blue-50 px-3 py-1.5 rounded-2xl text-xs font-bold text-blue-800 border border-blue-100">
+        {/* Role-Specific Navigation (Admin shortcut only, no public portal switcher) */}
+        {role === 'admin' && (
+          <nav className="hidden md:flex items-center gap-1.5">
+            <Link
+              to={pathname === '/admin' ? '/' : '/admin'}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-purple-50 hover:bg-purple-100 text-purple-700 border border-purple-200 text-xs font-bold transition-all shadow-xs"
+            >
+              <ShieldCheck className="w-3.5 h-3.5" />
+              <span>{pathname === '/admin' ? 'View Storefront' : 'Owner Dashboard'}</span>
+            </Link>
+          </nav>
+        )}
+        {role === 'driver' && (
+          <div className="hidden md:flex items-center gap-1.5 bg-blue-50 px-3 py-1.5 rounded-2xl text-xs font-bold text-blue-800 border border-blue-100">
             <Truck className="w-3.5 h-3.5 text-blue-600" />
             <span>Driver Delivery Mode</span>
-          </nav>
-        ) : (
-          <nav className="hidden md:flex items-center gap-1 bg-slate-100 p-1 rounded-2xl text-xs font-bold">
-            <Link
-              to="/"
-              className={`px-3 py-1.5 rounded-xl transition-all ${
-                pathname === '/' || pathname.startsWith('/customer') || pathname === '/orders' || pathname === '/subscriptions'
-                  ? 'bg-white text-brand-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Customer App
-            </Link>
-            <Link
-              to="/driver"
-              className={`px-3 py-1.5 rounded-xl transition-all ${
-                pathname.startsWith('/driver')
-                  ? 'bg-white text-blue-700 shadow-sm'
-                  : 'text-slate-600 hover:text-slate-900'
-              }`}
-            >
-              Driver Portal
-            </Link>
-            {role === 'admin' && (
-              <Link
-                to="/admin"
-                className={`px-3 py-1.5 rounded-xl transition-all ${
-                  pathname === '/admin'
-                    ? 'bg-white text-purple-700 shadow-sm'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                Owner Dashboard
-              </Link>
-            )}
-          </nav>
+          </div>
         )}
 
         {/* Action Controls */}
