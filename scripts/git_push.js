@@ -1,5 +1,5 @@
 import git from 'isomorphic-git';
-import http from 'isomorphic-git/http/node';
+import http from 'isomorphic-git/http/web';
 import fs from 'fs';
 
 const repoDir = process.cwd();
@@ -17,7 +17,7 @@ async function pushRepo() {
       force: true,
       onAuth: () => {
         if (token) {
-          return { username: token };
+          return { username: 'hanzlaazmat14-svg', password: token };
         }
         return undefined;
       }
