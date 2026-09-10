@@ -3,6 +3,7 @@ import { supabase } from '../../lib/supabase';
 import { Product } from '../../lib/database.types';
 import { formatCurrency } from '../../lib/utils';
 import { useToast } from '../../context/ToastContext';
+import { DeviceImageUpload } from '../common/DeviceImageUpload';
 import {
   Package,
   Edit2,
@@ -360,6 +361,14 @@ export const ProductManager: React.FC = () => {
                   Product Photo / Image
                 </label>
 
+                {/* Upload from Device */}
+                <DeviceImageUpload
+                  folder="products"
+                  label="Upload Product Photo from Device"
+                  helperText="Select or drop photo from your phone or PC"
+                  onImageUploaded={(url) => setEditImageUrl(url)}
+                />
+
                 <div className="flex items-center gap-4">
                   <div className="w-20 h-20 rounded-2xl bg-white border border-slate-200 p-2 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">
                     {editImageUrl ? (
@@ -558,6 +567,14 @@ export const ProductManager: React.FC = () => {
                 <label className="block font-bold text-slate-700 text-xs">
                   Select Product Image
                 </label>
+
+                {/* Upload from Device */}
+                <DeviceImageUpload
+                  folder="products"
+                  label="Upload Photo from Device"
+                  helperText="Select or drop photo from your phone or PC"
+                  onImageUploaded={(url) => setNewImageUrl(url)}
+                />
 
                 <div className="flex items-center gap-4">
                   <div className="w-16 h-16 rounded-2xl bg-white border border-slate-200 p-2 flex items-center justify-center overflow-hidden shrink-0 shadow-sm">

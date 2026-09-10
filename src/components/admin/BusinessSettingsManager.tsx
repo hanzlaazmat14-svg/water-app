@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useBusiness, DynamicBusinessInfo } from '../../context/BusinessContext';
 import { useToast } from '../../context/ToastContext';
+import { DeviceImageUpload } from '../common/DeviceImageUpload';
 import {
   Building2,
   Phone,
@@ -430,11 +431,26 @@ export const BusinessSettingsManager: React.FC = () => {
               </div>
             </div>
 
+            {/* Upload Logo From Device */}
+            <div className="space-y-1.5">
+              <label className="block text-xs font-bold text-slate-700">
+                Upload Brand Logo From Device
+              </label>
+              <DeviceImageUpload
+                folder="logos"
+                label="Upload Logo (PNG, SVG, JPG)"
+                helperText="Select or drop your logo file here"
+                onImageUploaded={(url) => {
+                  handleChange('logoUrl', url);
+                }}
+              />
+            </div>
+
             {/* Logo Input */}
             <div className="space-y-3">
               <div>
                 <label className="block text-xs font-bold text-slate-700 mb-1.5">
-                  Logo Image URL or Local Path
+                  Or Paste Logo URL / Local Path
                 </label>
                 <input
                   type="text"
