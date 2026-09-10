@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { useBusiness } from '../../context/BusinessContext';
 import { businessConfig } from '../../config/business';
 import { useNavigate } from 'react-router-dom';
 import { detectLocation } from '../../lib/geolocation';
@@ -28,6 +29,7 @@ export const Register: React.FC<RegisterProps> = ({ onSwitchToLogin, onSuccess }
   const navigate = useNavigate();
   const { signUp } = useAuth();
   const { showToast } = useToast();
+  const { settings } = useBusiness();
 
   const [fullName, setFullName] = useState<string>('');
   const [phone, setPhone] = useState<string>('');
@@ -115,8 +117,14 @@ export const Register: React.FC<RegisterProps> = ({ onSwitchToLogin, onSuccess }
       <div className="bg-white w-full max-w-md rounded-3xl shadow-card border border-slate-200 p-6 sm:p-8 space-y-6 animate-slide-up">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 p-2.5 shadow-sm flex items-center justify-center text-white mx-auto">
-            <img src={businessConfig.logoUrl} alt={businessConfig.companyName} className="w-full h-full object-contain filter brightness-0 invert" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 p-2 shadow-sm flex items-center justify-center text-white mx-auto overflow-hidden">
+            <img
+              src={settings.logoUrl || '/logo.svg'}
+              alt={settings.companyName}
+              className={`w-full h-full object-contain ${
+                settings.logoUrl === '/logo.svg' || !settings.logoUrl ? 'filter brightness-0 invert' : ''
+              }`}
+            />
           </div>
           <h2 className="text-xl font-extrabold text-slate-900 tracking-tight">
             Create Customer Account

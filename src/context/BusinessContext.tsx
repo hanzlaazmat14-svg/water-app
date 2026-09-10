@@ -128,6 +128,65 @@ export const BusinessProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     };
   }, [fetchSettings]);
 
+  // Dynamically synchronize document title, favicon, apple-touch-icon, and PWA manifest with active business settings
+  useEffect(() => {
+    if (typeof document === 'undefined') return;
+
+    // 1. Update Document Title
+    if (settings.companyName) {
+      document.title = `${settings.companyName} - Water Delivery`;
+    }
+
+    const currentLogo = settings.logoUrl || '/logo.svg';
+
+    // 2. Update Browser Favicon
+    const favicon = (document.getElementById('app-favicon') ||
+      document.querySelector("link[rel='icon']")) as HTMLLinkElement | null;
+    if (favicon) {
+      favicon.href = currentLogo;
+      favicon.type = currentLogo.endsWith('.svg') ? 'image/svg+xml' : 'image/png';
+    }
+
+    // 3. Update Apple Touch Icon (Home screen icon on iOS)
+    let appleTouch = (document.getElementById('app-apple-touch-icon') ||
+      document.querySelector("link[rel='apple-touch-icon']")) as HTMLLinkElement | null;
+    if (appleTouch) {
+      appleTouch.href = currentLogo;
+    }
+
+    // 4. Update Dynamic PWA Web App Manifest (Home screen icon & app name on Android / Chrome)
+    try {
+      const manifestObj = {
+        name: settings.companyName || 'Water Delivery App',
+        short_name: settings.shortName || settings.companyName || 'Water App',
+        description: settings.slogan || 'Pure drinking water delivered to your doorstep.',
+        start_url: '/',
+        display: 'standalone',
+        background_color: '#ffffff',
+        theme_color: '#0284c7',
+        orientation: 'portrait',
+        icons: [
+          {
+            src: currentLogo,
+            sizes: '192x192 512x512',
+            type: currentLogo.endsWith('.svg') ? 'image/svg+xml' : 'image/png',
+            purpose: 'any maskable',
+          },
+        ],
+      };
+
+      const blob = new Blob([JSON.stringify(manifestObj)], { type: 'application/manifest+json' });
+      const manifestUrl = URL.createObjectURL(blob);
+      const manifestLink = (document.getElementById('app-manifest') ||
+        document.querySelector("link[rel='manifest']")) as HTMLLinkElement | null;
+      if (manifestLink) {
+        manifestLink.href = manifestUrl;
+      }
+    } catch (e) {
+      console.warn('Could not update dynamic web manifest:', e);
+    }
+  }, [settings]);
+
   const updateSettings = async (newValues: Partial<DynamicBusinessInfo>) => {
     try {
       const dbPayload: Partial<BusinessSettings> = {

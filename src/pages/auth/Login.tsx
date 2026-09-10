@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useToast } from '../../context/ToastContext';
+import { useBusiness } from '../../context/BusinessContext';
 import { supabase } from '../../lib/supabase';
 import { businessConfig } from '../../config/business';
 import { Mail, Lock, Loader2, AlertCircle, ShieldCheck, Truck, User } from 'lucide-react';
@@ -16,6 +17,7 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister, onSuccess, por
   const navigate = useNavigate();
   const { signIn } = useAuth();
   const { showToast } = useToast();
+  const { settings } = useBusiness();
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -80,8 +82,14 @@ export const Login: React.FC<LoginProps> = ({ onSwitchToRegister, onSuccess, por
       <div className="bg-white w-full max-w-md rounded-3xl shadow-card border border-slate-200 p-6 sm:p-8 space-y-6 animate-slide-up">
         {/* Brand Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 p-2.5 shadow-sm flex items-center justify-center text-white mx-auto">
-            <img src={businessConfig.logoUrl} alt={businessConfig.companyName} className="w-full h-full object-contain filter brightness-0 invert" />
+          <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 p-2 shadow-sm flex items-center justify-center text-white mx-auto overflow-hidden">
+            <img
+              src={settings.logoUrl || '/logo.svg'}
+              alt={settings.companyName}
+              className={`w-full h-full object-contain ${
+                settings.logoUrl === '/logo.svg' || !settings.logoUrl ? 'filter brightness-0 invert' : ''
+              }`}
+            />
           </div>
 
           {portalMode === 'admin' ? (

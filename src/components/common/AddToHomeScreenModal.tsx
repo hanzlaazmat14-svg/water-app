@@ -1,4 +1,5 @@
 import React from 'react';
+import { useBusiness } from '../../context/BusinessContext';
 import { businessConfig } from '../../config/business';
 import { usePWAInstall } from '../../hooks/usePWAInstall';
 import {
@@ -19,6 +20,7 @@ interface AddToHomeScreenModalProps {
 
 export const AddToHomeScreenModal: React.FC<AddToHomeScreenModalProps> = ({ isOpen, onClose }) => {
   const { canPromptDirectly, promptInstall, isIOS, isStandalone } = usePWAInstall();
+  const { settings } = useBusiness();
 
   if (!isOpen) return null;
 
@@ -41,15 +43,24 @@ export const AddToHomeScreenModal: React.FC<AddToHomeScreenModalProps> = ({ isOp
 
         {/* App Logo & Header */}
         <div className="text-center space-y-2 pt-2">
-          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 p-3 shadow-elevated flex items-center justify-center text-white mx-auto">
-            <img
-              src={businessConfig.logoUrl}
-              alt={businessConfig.companyName}
-              className="w-full h-full object-contain filter brightness-0 invert"
-            />
+          <div className="w-14 h-14 rounded-2xl bg-gradient-to-tr from-sky-600 to-sky-400 p-2.5 shadow-elevated flex items-center justify-center text-white mx-auto overflow-hidden">
+            {settings.logoUrl ? (
+              <img
+                src={settings.logoUrl}
+                alt={settings.companyName}
+                className={`w-full h-full object-contain ${
+                  settings.logoUrl === '/logo.svg' ? 'filter brightness-0 invert' : ''
+                }`}
+                onError={(e) => {
+                  (e.target as HTMLElement).style.display = 'none';
+                }}
+              />
+            ) : (
+              <Sparkles className="w-7 h-7 text-white" />
+            )}
           </div>
           <h3 className="text-lg font-extrabold text-slate-900 tracking-tight">
-            Install {businessConfig.shortName} App
+            Install {settings.shortName || settings.companyName} App
           </h3>
           <p className="text-xs text-slate-500 max-w-xs mx-auto">
             Enjoy instant 1-tap water refill orders, order tracking, and offline support on your home screen.
