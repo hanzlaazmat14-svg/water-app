@@ -146,6 +146,16 @@ export interface DeliveryStatusHistory {
 
 export interface BusinessSettings {
   id: string;
+  company_name?: string;
+  short_name?: string;
+  slogan?: string;
+  logo_url?: string;
+  phone?: string;
+  whatsapp_number?: string;
+  support_email?: string;
+  business_address?: string;
+  city?: string;
+  currency?: string;
   delivery_fee: number;
   free_delivery_threshold: number;
   min_order_amount: number;

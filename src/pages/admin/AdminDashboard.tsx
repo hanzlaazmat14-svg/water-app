@@ -7,6 +7,9 @@ import { CustomerManager } from '../../components/admin/CustomerManager';
 import { DriverManager } from '../../components/admin/DriverManager';
 import { ProductManager } from '../../components/admin/ProductManager';
 import { SlotManager } from '../../components/admin/SlotManager';
+import { BusinessSettingsManager } from '../../components/admin/BusinessSettingsManager';
+import { OwnerProfileManager } from '../../components/admin/OwnerProfileManager';
+import { useBusiness } from '../../context/BusinessContext';
 import { businessConfig } from '../../config/business';
 import {
   LayoutDashboard,
@@ -15,9 +18,10 @@ import {
   Truck,
   Package,
   Calendar,
-  Settings,
   RefreshCw,
-  Loader2
+  Loader2,
+  Building2,
+  ShieldCheck,
 } from 'lucide-react';
 
 interface AdminDashboardProps {
@@ -26,6 +30,7 @@ interface AdminDashboardProps {
 }
 
 export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentTab, onTabChange }) => {
+  const { settings } = useBusiness();
   const [activeTab, setActiveTab] = useState<string>(currentTab || 'overview');
   const [orders, setOrders] = useState<Order[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -82,7 +87,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentTab, onTa
       else if (currentTab === 'admin-orders') setActiveTab('orders');
       else if (currentTab === 'admin-customers') setActiveTab('customers');
       else if (currentTab === 'admin-products') setActiveTab('products');
-      else if (currentTab === 'admin-settings') setActiveTab('slots');
+      else if (currentTab === 'admin-settings' || currentTab === 'admin-business') setActiveTab('business');
+      else if (currentTab === 'admin-slots') setActiveTab('slots');
+      else if (currentTab === 'admin-profile') setActiveTab('profile');
     }
   }, [currentTab]);
 
@@ -120,8 +127,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentTab, onTa
     { id: 'orders', label: 'All Orders', icon: Clock },
     { id: 'customers', label: 'Customers', icon: Users },
     { id: 'drivers', label: 'Drivers', icon: Truck },
-    { id: 'products', label: 'Products & Prices', icon: Package },
+    { id: 'products', label: 'Products & Photos', icon: Package },
     { id: 'slots', label: 'Delivery Slots', icon: Calendar },
+    { id: 'business', label: 'Store Info & Logo', icon: Building2 },
+    { id: 'profile', label: 'Owner & Security', icon: ShieldCheck },
   ];
 
   const handleSelectTab = (tabId: string) => {
@@ -131,7 +140,9 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentTab, onTa
       else if (tabId === 'orders') onTabChange('admin-orders');
       else if (tabId === 'customers') onTabChange('admin-customers');
       else if (tabId === 'products') onTabChange('admin-products');
-      else if (tabId === 'slots') onTabChange('admin-settings');
+      else if (tabId === 'slots') onTabChange('admin-slots');
+      else if (tabId === 'business') onTabChange('admin-settings');
+      else if (tabId === 'profile') onTabChange('admin-profile');
     }
   };
 
@@ -144,7 +155,7 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentTab, onTa
             Owner Command Center
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-            {businessConfig.companyName} Operations
+            {settings.companyName || businessConfig.companyName} Operations
           </h1>
         </div>
 
@@ -219,6 +230,10 @@ export const AdminDashboard: React.FC<AdminDashboardProps> = ({ currentTab, onTa
           {activeTab === 'products' && <ProductManager />}
 
           {activeTab === 'slots' && <SlotManager />}
+
+          {activeTab === 'business' && <BusinessSettingsManager />}
+
+          {activeTab === 'profile' && <OwnerProfileManager />}
         </div>
       )}
     </div>

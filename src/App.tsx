@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-route
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ToastProvider } from './context/ToastContext';
 import { CartProvider, useCart } from './context/CartContext';
+import { BusinessProvider } from './context/BusinessContext';
 import { CartCheckoutModal } from './components/customer/CartCheckoutModal';
 import { Navbar } from './components/common/Navbar';
 import { BottomNav } from './components/common/BottomNav';
@@ -206,11 +207,13 @@ export function App() {
   return (
     <BrowserRouter>
       <AuthProvider>
-        <ToastProvider>
-          <CartProvider>
-            <AppLayout />
-          </CartProvider>
-        </ToastProvider>
+        <BusinessProvider>
+          <ToastProvider>
+            <CartProvider>
+              <AppLayout />
+            </CartProvider>
+          </ToastProvider>
+        </BusinessProvider>
       </AuthProvider>
     </BrowserRouter>
   );

@@ -37,7 +37,7 @@ async function prepareRepo() {
       name: 'Hanzla Azmat',
       email: 'hanzlaazmat14@gmail.com',
     },
-    message: 'feat: publish-ready production release of local water delivery pwa',
+    message: process.argv[2] || 'feat: add business info manager, owner profile & password security, product photos, and sleek dynamic navbar',
   });
 
   console.log('Commit created with SHA:', sha);
